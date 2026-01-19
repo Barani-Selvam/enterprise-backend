@@ -90,21 +90,21 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-    if (!db.Categories.Any())
-    {
-        db.Categories.AddRange(
-            new Category { Name = "Electronics" },
-            new Category { Name = "Clothing" },
-            new Category { Name = "Furniture" },
-            new Category { Name = "Books" }
-        );
-        db.SaveChanges();
-    }
-}
+//    if (!db.Categories.Any())
+//    {
+//        db.Categories.AddRange(
+//            new Category { Name = "Electronics" },
+//            new Category { Name = "Clothing" },
+//            new Category { Name = "Furniture" },
+//            new Category { Name = "Books" }
+//        );
+//        db.SaveChanges();
+//    }
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -124,5 +124,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+app.Urls.Add($"http://0.0.0.0:{port}");
 
 app.Run();
