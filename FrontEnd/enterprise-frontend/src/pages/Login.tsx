@@ -20,7 +20,7 @@ export const Login = () => {
     setLoading(true);
 
     try {
-      const res = await api.post("/auth/login", { email, password });
+      const res = await api.post("/api/Auth/login", { email, password });
 
       login(res.data.token, res.data.username, res.data.role);
 
