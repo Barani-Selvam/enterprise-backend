@@ -9,7 +9,7 @@ export const Register = () => {
   const navigate = useNavigate();
 
   const handleRegister = async () => {
-    await api.post("/auth/register", { name, email, password });
+    await api.post("/api/Auth/register", { name, email, password });
 
     // Redirect to home with success flag
     navigate("/", { state: { registered: true } });
