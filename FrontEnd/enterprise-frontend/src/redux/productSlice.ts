@@ -29,7 +29,7 @@ const initialState: ProductState = { items: [] };
 export const fetchProducts = createAsyncThunk<Product[]>(
   "products/fetch",
   async () => {
-    const res = await api.get<Product[]>("/products");
+    const res = await api.get<Product[]>("/api/products");
     return res.data;
   }
 );
@@ -38,7 +38,7 @@ export const fetchProducts = createAsyncThunk<Product[]>(
 export const addProduct = createAsyncThunk<Product, Omit<Product, "id">>(
   "products/add",
   async (product) => {
-    const res = await api.post<Product>("/products", product);
+    const res = await api.post<Product>("/api/products", product);
     return res.data;
   }
 );
@@ -47,7 +47,7 @@ export const addProduct = createAsyncThunk<Product, Omit<Product, "id">>(
 export const updateProduct = createAsyncThunk<Product, UpdateProductDto>(
   "products/update",
   async (dto, { dispatch }) => {
-    await api.put(`/products/${dto.id}`, dto);
+    await api.put(`/api/products/${dto.id}`, dto);
     // reload full products with category
     dispatch(fetchProducts());
 
@@ -58,7 +58,7 @@ export const updateProduct = createAsyncThunk<Product, UpdateProductDto>(
 export const deleteProduct = createAsyncThunk<number, number>(
   "products/delete",
   async (id) => {
-    await api.delete(`/products/${id}`);
+    await api.delete(`/api/products/${id}`);
     return id;
   }
 );
