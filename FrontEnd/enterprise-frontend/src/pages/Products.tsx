@@ -77,19 +77,42 @@ export const Products: React.FC = () => {
 
   const [filterCategoryId, setFilterCategoryId] = useState<number>(0);
 
+  const [filterPriceRange, setFilterPriceRange] = useState<string>("all");
+
   useEffect(() => {
     dispatch(fetchProducts());
     dispatch(fetchCategories());
   }, [dispatch]);
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [filterCategoryId]);
+  setCurrentPage(1);
+}, [filterCategoryId, filterPriceRange]);
 
-  const filteredProducts =
-    filterCategoryId === 0
-      ? products
-      : products.filter((p) => p.categoryId === filterCategoryId);
+  const filteredProducts = products.filter((p) => {
+  const categoryMatch =
+    filterCategoryId === 0 || p.categoryId === filterCategoryId;
+
+  let priceMatch = true;
+
+  switch (filterPriceRange) {
+    case "0-500":
+      priceMatch = p.price >= 0 && p.price <= 500;
+      break;
+    case "500-1000":
+      priceMatch = p.price > 500 && p.price <= 1000;
+      break;
+    case "1000-1500":
+      priceMatch = p.price > 1000 && p.price <= 1500;
+      break;
+    case "1500+":
+      priceMatch = p.price > 1500;
+      break;
+    default:
+      priceMatch = true;
+  }
+
+  return categoryMatch && priceMatch;
+});
 
   const totalPages = Math.ceil(filteredProducts.length / pageSize);
 
@@ -116,22 +139,40 @@ export const Products: React.FC = () => {
         </div>
       )}
 
-      {/* Category Filter Dropdown */}
-      <div className="mb-4">
-        <label className="mr-2 font-semibold">Filter by Category:</label>
-        <select
-          className="border p-2 rounded"
-          value={filterCategoryId}
-          onChange={(e) => setFilterCategoryId(Number(e.target.value))}
-        >
-          <option value={0}>All</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      <div className="mb-4 flex gap-6 items-center">
+  {/* Category Filter */}
+  <div>
+    <label className="mr-2 font-semibold">Category:</label>
+    <select
+      className="border p-2 rounded"
+      value={filterCategoryId}
+      onChange={(e) => setFilterCategoryId(Number(e.target.value))}
+    >
+      <option value={0}>All</option>
+      {categories.map((c) => (
+        <option key={c.id} value={c.id}>
+          {c.name}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  {/* Price Filter */}
+  <div>
+    <label className="mr-2 font-semibold">Price:</label>
+    <select
+      className="border p-2 rounded"
+      value={filterPriceRange}
+      onChange={(e) => setFilterPriceRange(e.target.value)}
+    >
+      <option value="all">All</option>
+      <option value="0-500">₹0 – ₹500</option>
+      <option value="500-1000">₹500 – ₹1000</option>
+      <option value="1000-1500">₹1000 – ₹1500</option>
+      <option value="1500+">₹1500+</option>
+    </select>
+  </div>
+</div>
 
       <table className="min-w-full border rounded overflow-hidden">
         <thead className="bg-gray-200">
