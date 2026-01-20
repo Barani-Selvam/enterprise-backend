@@ -15,7 +15,7 @@ const initialState: CategoryState = { items: [] };
 export const fetchCategories = createAsyncThunk<Category[]>(
   "categories/fetch",
   async () => {
-    const res = await api.get<Category[]>("/categories");
+    const res = await api.get<Category[]>("/api/categories");
     return res.data;
   }
 );
