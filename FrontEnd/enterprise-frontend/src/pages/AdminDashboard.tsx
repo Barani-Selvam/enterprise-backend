@@ -29,7 +29,7 @@ export const AdminDashboard = () => {
       setLoading(true);
       setError(null);
 
-      const res = await api.get<DashboardStats>("/admin/dashboard");
+      const res = await api.get<DashboardStats>("/api/admin/dashboard");
       setStats(res.data);
     } catch {
       setError("Access denied or server error while loading dashboard.");
